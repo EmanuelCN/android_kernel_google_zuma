@@ -6972,7 +6972,6 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
 {
 	struct cpumask *pd_mask = perf_domain_span(pd);
 	unsigned long max_util = 0, sum_util = 0, cpu_cap;
-	unsigned long energy = 0;
 	int cpu;
 
 	cpu_cap = arch_scale_cpu_capacity(cpumask_first(pd_mask));
@@ -7044,11 +7043,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
 		max_util = max(max_util, min(cpu_util, cpu_cap));
 	}
 
-	trace_android_vh_em_cpu_energy(pd->em_pd, max_util, sum_util, &energy);
-	if (!energy)
-		energy = em_cpu_energy(pd->em_pd, max_util, sum_util, cpu_cap);
-
-	return energy;
+	return em_cpu_energy(pd->em_pd, max_util, sum_util, cpu_cap);
 }
 
 /*
