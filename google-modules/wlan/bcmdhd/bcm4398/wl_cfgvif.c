@@ -1901,7 +1901,7 @@ wl_get_overlapping_chspecs(chanspec_t sel_chspec,
 				/* if list is empty, break */
 				break;
 			}
-			if ((chan_array[j] == CHSPEC_CHANNEL(chspec))) {
+			if (chan_array[j] == CHSPEC_CHANNEL(chspec)) {
 				new_arr[chan_idx].chanspec = chspec;
 				new_arr[chan_idx].chaninfo = chaninfo;
 				WL_DBG(("sel_chspec:%x overlap_chspec:%x\n",
