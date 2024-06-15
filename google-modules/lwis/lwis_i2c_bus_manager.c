@@ -134,7 +134,7 @@ static int create_i2c_kthread_workers(struct lwis_i2c_bus_manager *i2c_bus_manag
 		  i2c_bus_manager->i2c_bus_name);
 	kthread_init_worker(&i2c_bus_manager->i2c_bus_worker);
 	i2c_bus_manager->i2c_bus_worker_thread = kthread_run(
-		kthread_worker_fn, &i2c_bus_manager->i2c_bus_worker, i2c_bus_thread_name);
+		kthread_worker_fn, &i2c_bus_manager->i2c_bus_worker, "%s", i2c_bus_thread_name);
 	if (IS_ERR(i2c_bus_manager->i2c_bus_worker_thread)) {
 		dev_err(lwis_dev->dev, "Creation of i2c_bus_worker_thread failed for bus %s\n",
 			i2c_bus_manager->i2c_bus_name);
