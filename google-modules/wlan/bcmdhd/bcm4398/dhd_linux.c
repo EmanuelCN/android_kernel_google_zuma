@@ -4156,7 +4156,7 @@ dhd_event_logtrace_process(struct work_struct * work)
 #endif /* EWP_EDL */
 
 	if (ret > 0) {
-		schedule_delayed_work(&(dhd)->event_log_dispatcher_work,
+		queue_delayed_work(system_power_efficient_wq, &(dhd)->event_log_dispatcher_work,
 			msecs_to_jiffies(DHD_EVENT_LOGTRACE_RESCHEDULE_DELAY_MS));
 	}
 	return;
@@ -4176,7 +4176,7 @@ dhd_schedule_logtrace(void *dhd_info)
 			dhd->thr_logtrace_ctl.thr_pid));
 	}
 #else
-	schedule_delayed_work(&dhd->event_log_dispatcher_work, 0);
+	queue_delayed_work(system_power_efficient_wq, &dhd->event_log_dispatcher_work, 0);
 #endif /* DHD_USE_KTHREAD_FOR_LOGTRACE */
 	return;
 }
@@ -4387,7 +4387,7 @@ void
 dhd_schedule_edl_work(dhd_pub_t *dhdp, uint delay_ms)
 {
 	dhd_info_t *dhd = (dhd_info_t *)dhdp->info;
-	schedule_delayed_work(&dhd->edl_dispatcher_work, msecs_to_jiffies(delay_ms));
+	queue_delayed_work(system_power_efficient_wq, &dhd->edl_dispatcher_work, msecs_to_jiffies(delay_ms));
 }
 #endif /* EWP_EDL */
 
@@ -15560,7 +15560,7 @@ dhd_module_init_hdm(void)
 	/* remove sysfs file after module load properly */
 	if (!err && !dhd_download_fw_on_driverload) {
 		INIT_DELAYED_WORK(&hdm_sysfs_wq, dhd_hdm_wlan_sysfs_deinit);
-		schedule_delayed_work(&hdm_sysfs_wq, msecs_to_jiffies(SYSFS_DEINIT_MS));
+		queue_delayed_work(system_power_efficient_wq, &hdm_sysfs_wq, msecs_to_jiffies(SYSFS_DEINIT_MS));
 	}
 
 	hdm_trigger_init = FALSE;

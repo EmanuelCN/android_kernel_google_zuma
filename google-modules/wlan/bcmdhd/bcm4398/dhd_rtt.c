@@ -2177,7 +2177,7 @@ dhd_rtt_set_cfg(dhd_pub_t *dhd, rtt_config_params_t *params)
 			 * Proxd timeout for NAN target list is scheduled as a whole,
 			 * and not per target, unlike for legacy target list
 			 */
-			schedule_delayed_work(&rtt_status->proxd_timeout,
+			queue_delayed_work(system_power_efficient_wq, &rtt_status->proxd_timeout,
 				msecs_to_jiffies(DHD_NAN_RTT_TIMER_INTERVAL_MS));
 		}
 #endif /* WL_NAN */
@@ -3996,7 +3996,7 @@ dhd_rtt_start(dhd_pub_t *dhd)
 		goto exit;
 	} else {
 		/* schedule proxd timeout */
-		schedule_delayed_work(&rtt_status->proxd_timeout,
+		queue_delayed_work(system_power_efficient_wq, &rtt_status->proxd_timeout,
 			msecs_to_jiffies(DHD_NAN_RTT_TIMER_INTERVAL_MS));
 
 	}

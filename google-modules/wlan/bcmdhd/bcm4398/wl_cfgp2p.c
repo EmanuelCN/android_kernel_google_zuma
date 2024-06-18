@@ -3211,7 +3211,7 @@ fail:
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0))
 	if (cfg->wiphy_lock_held) {
-		schedule_delayed_work(&cfg->remove_iface_work, 0);
+		queue_delayed_work(system_power_efficient_wq, &cfg->remove_iface_work, 0);
 	} else
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0) */
 	{
