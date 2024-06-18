@@ -19052,20 +19052,6 @@ void dhd_pm_wake_unlock(dhd_pub_t *pub)
 #endif /* CONFIG_HAS_WAKELOCK */
 }
 
-void dhd_txfl_wake_unlock(dhd_pub_t *pub)
-{
-#ifdef CONFIG_HAS_WAKELOCK
-	dhd_info_t *dhd = (dhd_info_t *)(pub->info);
-
-	if (dhd) {
-		/* if wl_txflwake is active, unlock it */
-		if (dhd_wake_lock_active(dhd->wl_txflwake)) {
-			dhd_wake_unlock(dhd->wl_txflwake);
-		}
-	}
-#endif /* CONFIG_HAS_WAKELOCK */
-}
-
 void dhd_nan_wake_unlock(dhd_pub_t *pub)
 {
 #ifdef CONFIG_HAS_WAKELOCK
@@ -19107,7 +19093,7 @@ dhd_os_check_wakelock_all(dhd_pub_t *pub)
 {
 #if defined(CONFIG_HAS_WAKELOCK) || defined(BCMSDIO)
 #if defined(CONFIG_HAS_WAKELOCK)
-	int l1, l2, l4, l7, l8, l9, l10;
+	int l1, l2, l4, l7, l8,l10;
 	int l5 = 0, l6 = 0;
 	int c, lock_active;
 #endif /* CONFIG_HAS_WAKELOCK */
@@ -19139,15 +19125,14 @@ dhd_os_check_wakelock_all(dhd_pub_t *pub)
 	l6 = dhd_wake_lock_active(dhd->wl_scanwake);
 #endif /* DHD_USE_SCAN_WAKELOCK */
 	l8 = dhd_wake_lock_active(dhd->wl_pmwake);
-	l9 = dhd_wake_lock_active(dhd->wl_txflwake);
 	l10 = dhd_wake_lock_active(dhd->wl_nanwake);
-	lock_active = (l1 || l2 || l4 || l5 || l6 || l7 || l8 || l9 || l10);
+	lock_active = (l1 || l2 || l4 || l5 || l6 || l7 || l8 || l10);
 
 	/* Indicate to the Host to avoid going to suspend if internal locks are up */
 	if (lock_active) {
 		DHD_PRINT(("%s wakelock c-%d wl-%d wd-%d "
-			"ctl-%d intr-%d scan-%d evt-%d, pm-%d, txfl-%d nan-%d\n",
-			__FUNCTION__, c, l1, l2, l4, l5, l6, l7, l8, l9, l10));
+			"ctl-%d intr-%d scan-%d evt-%d, pm-%d, nan-%d\n",
+			__FUNCTION__, c, l1, l2, l4, l5, l6, l7, l8, l10));
 #ifdef RPM_FAST_TRIGGER
 		if (pub->rpm_fast_trigger && l4) {
 			DHD_PRINT(("%s : reset rpm_fast_trigger becasue of wl_ctrlwake activated\n",
@@ -19363,7 +19348,6 @@ void dhd_os_wake_lock_init(struct dhd_info *dhd)
 	dhd_wake_lock_init(dhd->wl_ctrlwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_ctrl_wake");
 	dhd_wake_lock_init(dhd->wl_evtwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_evt_wake");
 	dhd_wake_lock_init(dhd->wl_pmwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_pm_wake");
-	dhd_wake_lock_init(dhd->wl_txflwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_txfl_wake");
 #ifdef BCMPCIE_OOB_HOST_WAKE
 	dhd_wake_lock_init(dhd->wl_intrwake, dhd_bus_to_dev(dhd->pub.bus), "wlan_oob_irq_wake");
 #endif /* BCMPCIE_OOB_HOST_WAKE */
@@ -19387,7 +19371,6 @@ void dhd_os_wake_lock_destroy(struct dhd_info *dhd)
 	dhd_wake_lock_destroy(dhd->wl_ctrlwake);
 	dhd_wake_lock_destroy(dhd->wl_evtwake);
 	dhd_wake_lock_destroy(dhd->wl_pmwake);
-	dhd_wake_lock_destroy(dhd->wl_txflwake);
 #ifdef BCMPCIE_OOB_HOST_WAKE
 	dhd_wake_lock_destroy(dhd->wl_intrwake);
 #endif /* BCMPCIE_OOB_HOST_WAKE */
