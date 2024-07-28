@@ -127,6 +127,7 @@ typedef struct dhd_info {
 	/* Wakelocks */
 #if defined(CONFIG_HAS_WAKELOCK)
 	struct wakeup_source *wl_wifi;   /* Wifi wakelock */
+	struct wakeup_source *wl_rxwake; /* Wifi rx wakelock */
 	struct wakeup_source *wl_ctrlwake; /* Wifi ctrl wakelock */
 	struct wakeup_source *wl_wdwake; /* Wifi wd wakelock */
 	struct wakeup_source *wl_evtwake; /* Wifi event wakelock */
